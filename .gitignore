@@ -12,3 +12,51 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+
+
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/crypto-tracker-web-client/dist
+/crypto-tracker-web-client/tmp
+/crypto-tracker-web-client/out-tsc
+# Only exists if Bazel was run
+/crypto-tracker-web-client/bazel-out
+
+# dependencies
+/crypto-tracker-web-client/node_modules
+
+# profiling files
+chrome-profiler-events*.json
+speed-measure-plugin*.json
+
+# IDEs and editors
+/crypto-tracker-web-client/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# misc
+/crypto-tracker-web-client/.sass-cache
+/crypto-tracker-web-client/connect.lock
+/crypto-tracker-web-client/coverage
+/crypto-tracker-web-client/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/crypto-tracker-web-client/typings
+
+# System Files
+.DS_Store
+Thumbs.db

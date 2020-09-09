@@ -1,0 +1,7 @@
+<div class="app-navigation-bar">
+  <nav class="app-navigation-bar-tabs">
+    <img *ngFor="let tab of items" class="app-navigation-bar-icon" (click)="setCurrentActiveTabToHome()"
+      routerLink="{{tab.routerLink}}" src="{{tab.imageSource}}" title="{{tab.title}}" />
+  </nav>
+</div>
+<router-outlet></router-outlet>
