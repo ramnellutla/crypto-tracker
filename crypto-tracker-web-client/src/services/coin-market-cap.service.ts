@@ -9,30 +9,29 @@ import {
 import { CryptoListing, Datum } from 'src/model/crypto-listing';
 import { GetListingOptions } from 'src/model/get-listing-options';
 import { ListingTable } from 'src/model/listing-table';
+import { GlobalMetrics } from 'src/model/global-metrics';
+import { GlobalMetricsTable } from 'src/model/global-metrics-table';
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
 @Injectable({
   providedIn: 'root',
 })
 export class CoinMarketCapService {
-  private cryptoRankingList: CryptoListing;
   cryptoRankingListSubject: Subject<ListingTable[]> = new Subject<
     ListingTable[]
   >();
 
+  globalMetricsSubject: Subject<GlobalMetricsTable[]> = new Subject<
+    GlobalMetricsTable[]
+  >();
+
   constructor(private http: HttpClient) {}
 
-  getCryptoRankListObservable(): Observable<any[]> {
+  getCryptoListingsObservable(): Observable<ListingTable[]> {
     return this.cryptoRankingListSubject.asObservable();
   }
 
   getCryptoList(getListingOption: GetListingOptions): void {
-    const crytptoUrl = '/api/getlistings';
+    const cryptoListingsUrl = '/api/getListings';
 
     let httpParams = new HttpParams();
 
@@ -45,11 +44,10 @@ export class CoinMarketCapService {
     };
 
     this.http
-      .get(crytptoUrl, httpOptions)
+      .get(cryptoListingsUrl, httpOptions)
       .pipe()
       .subscribe(
         (listings: CryptoListing) => {
-          console.log('Data obtained', listings);
           const ret = [];
           listings.data.forEach((item) =>
             ret.push(this.adaptCryptoListingModel(item))
@@ -79,5 +77,33 @@ export class CoinMarketCapService {
       Math.round(data.quote.USD.percent_change_7d * 100) / 100;
 
     return listing;
+  }
+
+  getGlobalMetricsObservable(): Observable<GlobalMetricsTable[]> {
+    return this.globalMetricsSubject.asObservable();
+  }
+
+  getGlobalMetrics(convert: string): void {
+    const globalMetricsUrl = '/api/getGlobalMetrics';
+    const httpParams = new HttpParams().set('convert', convert);
+    const httpOptions = {
+      params: httpParams,
+    };
+    this.http
+      .get(globalMetricsUrl, httpOptions)
+      .pipe()
+      .subscribe(
+        (metrics: GlobalMetrics) => {
+          const globalMetricsTableData = this.adaptGlobalMetricsModel(metrics);
+          this.globalMetricsSubject.next(globalMetricsTableData);
+        },
+        (error) => {
+          console.log('Error occured', error);
+        }
+      );
+  }
+  adaptGlobalMetricsModel(metrics: GlobalMetrics): GlobalMetricsTable[] {
+    const metricTable: GlobalMetricsTable[] = [];
+    return metricTable;
   }
 }

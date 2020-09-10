@@ -14,14 +14,14 @@ import { MatTableDataSource } from '@angular/material/table';
 export class RankingComponent implements OnInit, AfterViewInit {
   // List of users
   cryptoRankList: any[] = [];
-  cryptoRankListObservable: Observable<any[]>;
+  cryptoRankListObservable: Observable<ListingTable[]>;
   cryptoRankListSubscription: Subscription;
   cryptoRankListError = false;
   cryptoRankListErrorSubscription: Subscription;
   cryptoRankListErrorSubject: Subject<boolean> = new Subject<boolean>();
 
   constructor(private coinMarketCapService: CoinMarketCapService) {}
-  dataSource = new MatTableDataSource<ListingTable[]>();
+  dataSource = new MatTableDataSource<ListingTable>();
   displayedColumns = [
     'rank',
     'asset',
@@ -37,7 +37,7 @@ export class RankingComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit(): void {
-    this.cryptoRankListObservable = this.coinMarketCapService.getCryptoRankListObservable();
+    this.cryptoRankListObservable = this.coinMarketCapService.getCryptoListingsObservable();
 
     this.cryptoRankListSubscription = this.cryptoRankListObservable.subscribe(
       (data) => {
@@ -48,7 +48,7 @@ export class RankingComponent implements OnInit, AfterViewInit {
     this.coinMarketCapService.getCryptoList(new GetListingOptions());
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 }
