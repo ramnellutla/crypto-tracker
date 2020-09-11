@@ -3,6 +3,8 @@ import {
   NavigationStatusService,
   TabName,
 } from 'src/services/navigation-status.service';
+import { GetListingOptions } from 'src/model/get-listing-options';
+import { CoinMarketCapService } from 'src/services/coin-market-cap.service';
 
 @Component({
   selector: 'app-navigation',
@@ -13,7 +15,10 @@ export class NavigationComponent implements OnInit {
   items: any[];
   portfolio: any;
   rippleColor: 'yellow';
-  constructor(private navigationStatusService: NavigationStatusService) {}
+  constructor(
+    private navigationStatusService: NavigationStatusService,
+    private coinMarketCapService: CoinMarketCapService
+  ) {}
 
   ngOnInit(): void {
     this.portfolio = {

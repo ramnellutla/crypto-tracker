@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject, forkJoin } from 'rxjs';
 import {
   HttpClient,
   HttpErrorResponse,
@@ -24,6 +24,10 @@ export class CoinMarketCapService {
     GlobalMetricsTable[]
   >();
 
+  globalMetricsUrl = '/api/getGlobalMetrics';
+  cryptoListingsUrl = '/api/getListings';
+  getListingOption = new GetListingOptions();
+
   constructor(private http: HttpClient) {}
 
   getCryptoListingsObservable(): Observable<ListingTable[]> {
@@ -31,8 +35,6 @@ export class CoinMarketCapService {
   }
 
   getCryptoList(getListingOption: GetListingOptions): void {
-    const cryptoListingsUrl = '/api/getListings';
-
     let httpParams = new HttpParams();
 
     Object.keys(getListingOption).forEach((key) => {
@@ -44,16 +46,16 @@ export class CoinMarketCapService {
     };
 
     this.http
-      .get(cryptoListingsUrl, httpOptions)
+      .get(this.cryptoListingsUrl, httpOptions)
       .pipe()
       .subscribe(
         (listings: CryptoListing) => {
-          const ret = [];
+          const listingsTable = [];
           listings.data.forEach((item) =>
-            ret.push(this.adaptCryptoListingModel(item))
+            listingsTable.push(this.adaptCryptoListingModel(item))
           );
 
-          this.cryptoRankingListSubject.next(ret);
+          this.cryptoRankingListSubject.next(listingsTable);
         },
         (error) => {
           console.log('Error occured', error);
@@ -84,26 +86,70 @@ export class CoinMarketCapService {
   }
 
   getGlobalMetrics(convert: string): void {
-    const globalMetricsUrl = '/api/getGlobalMetrics';
-    const httpParams = new HttpParams().set('convert', convert);
-    const httpOptions = {
+    let httpParams = new HttpParams();
+    Object.keys(this.getListingOption).forEach((key) => {
+      httpParams = httpParams.set(key, this.getListingOption[key]);
+    });
+    let httpOptions = {
       params: httpParams,
     };
-    this.http
-      .get(globalMetricsUrl, httpOptions)
-      .pipe()
-      .subscribe(
-        (metrics: GlobalMetrics) => {
-          const globalMetricsTableData = this.adaptGlobalMetricsModel(metrics);
-          this.globalMetricsSubject.next(globalMetricsTableData);
-        },
-        (error) => {
-          console.log('Error occured', error);
-        }
-      );
+    let cryptoListings = this.http.get(this.cryptoListingsUrl, httpOptions);
+
+    httpParams = new HttpParams().set('convert', convert);
+    httpOptions = {
+      params: httpParams,
+    };
+    const globalMetrics = this.http.get(this.globalMetricsUrl, httpOptions);
+
+    forkJoin([cryptoListings, globalMetrics]).subscribe(
+      (results) => {
+        const globalMetricsTable = [];
+        const listings = results[0] as CryptoListing;
+        const globalMetrics = results[1] as GlobalMetrics;
+
+        listings.data.forEach((item) =>
+          globalMetricsTable.push(
+            this.adaptGlobalMetricsModel(
+              item,
+              globalMetrics.data.quote.USD.total_market_cap
+            )
+          )
+        );
+        this.globalMetricsSubject.next(globalMetricsTable);
+      },
+      (error) => {
+        console.log('Error occured', error);
+      }
+    );
   }
-  adaptGlobalMetricsModel(metrics: GlobalMetrics): GlobalMetricsTable[] {
-    const metricTable: GlobalMetricsTable[] = [];
-    return metricTable;
+  adaptGlobalMetricsModel(
+    data: Datum,
+    totalMarketCap: number
+  ): GlobalMetricsTable {
+    const globalMetricsTable = new GlobalMetricsTable();
+    const availableSupply = data.total_supply;
+
+    globalMetricsTable.asset = data.name;
+    globalMetricsTable.symbol = data.symbol;
+    globalMetricsTable.percentageOfGlobalCap =
+      Math.round((data.quote.USD.market_cap / totalMarketCap) * 10000) / 100;
+    globalMetricsTable.current = Math.round(data.quote.USD.price * 100) / 100;
+    globalMetricsTable.tangibleCurrency =
+      Math.round(data.quote.USD.price * 100) / 100;
+    globalMetricsTable.worldsBillionaires =
+      Math.round(data.quote.USD.price * 100) / 100;
+    globalMetricsTable.gold = Math.round(data.quote.USD.price * 100) / 100;
+    globalMetricsTable.stocks = Math.round(data.quote.USD.price * 100) / 100;
+    globalMetricsTable.narrowMoney =
+      Math.round(data.quote.USD.price * 100) / 100;
+    globalMetricsTable.broadMoney =
+      Math.round(data.quote.USD.price * 100) / 100;
+    globalMetricsTable.realEstate =
+      Math.round(data.quote.USD.price * 100) / 100;
+    globalMetricsTable.wealth = Math.round(data.quote.USD.price * 100) / 100;
+    globalMetricsTable.derivatives =
+      Math.round(data.quote.USD.price * 100) / 100;
+
+    return globalMetricsTable;
   }
 }

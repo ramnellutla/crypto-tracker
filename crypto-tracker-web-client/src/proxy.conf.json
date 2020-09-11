@@ -1,6 +1,12 @@
 {
-  "/api/*": {
+  "/api/getListings": {
     "target": "http://localhost:5000",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/api/getGlobalMetrics": {
+    "target": "http://localhost:5001",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true

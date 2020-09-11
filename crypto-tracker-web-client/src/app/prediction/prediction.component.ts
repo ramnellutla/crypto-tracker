@@ -4,6 +4,7 @@ import { GlobalMetricsTable } from 'src/model/global-metrics-table';
 import { CoinMarketCapService } from 'src/services/coin-market-cap.service';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
+import { GetListingOptions } from 'src/model/get-listing-options';
 
 @Component({
   selector: 'app-prediction',
@@ -20,15 +21,19 @@ export class PredictionComponent implements OnInit {
   constructor(private coinMarketCapService: CoinMarketCapService) {}
   dataSource = new MatTableDataSource<GlobalMetricsTable>();
   displayedColumns = [
-    'rank',
     'asset',
     'symbol',
-    'price',
-    'market_cap',
-    'volume',
-    '1h',
-    '24h',
-    '7d',
+    'percentageOfGlobalCap',
+    'current',
+    'tangibleCurrency',
+    'worldsBillionaires',
+    'gold',
+    'stocks',
+    'narrowMoney',
+    'broadMoney',
+    'realEstate',
+    'wealth',
+    'derivatives',
   ];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -40,7 +45,6 @@ export class PredictionComponent implements OnInit {
         this.dataSource.data = data;
       }
     );
-
     this.coinMarketCapService.getGlobalMetrics('USD');
   }
 

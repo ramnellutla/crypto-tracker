@@ -1,54 +1,59 @@
 <div>
-  <table mat-table [dataSource]="dataSource" class="listings-table mat-elevation-z7">
-    <ng-container matColumnDef="rank">
-      <th class="listings-table-header" mat-header-cell *matHeaderCellDef> Rank </th>
-      <td mat-cell *matCellDef="let listing"> {{listing.rank}} </td>
-    </ng-container>
+  <table mat-table [dataSource]="dataSource" class="predictions-table mat-elevation-z7">
     <ng-container matColumnDef="asset">
-      <th class="listings-table-header" mat-header-cell *matHeaderCellDef> Asset </th>
-      <td mat-cell *matCellDef="let listing"> {{listing.asset}} </td>
-      <!--       <td mat-cell *matCellDef="let listing"> <img [src]="assets/32/color/kmd.png" /></td>
-   -->
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Asset </th>
+      <td mat-cell *matCellDef="let metric"> {{metric.asset}} </td>
     </ng-container>
     <ng-container matColumnDef="symbol">
-      <th class="listings-table-header" mat-header-cell *matHeaderCellDef> Ticker </th>
-      <td mat-cell *matCellDef="let listing"> {{listing.symbol}} </td>
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Ticker </th>
+      <td mat-cell *matCellDef="let metric"> {{metric.symbol}} </td>
     </ng-container>
-    <ng-container matColumnDef="price">
-      <th class="listings-table-header" mat-header-cell *matHeaderCellDef> Price </th>
-      <td mat-cell *matCellDef="let listing"> ${{listing.price}} </td>
+    <ng-container matColumnDef="percentageOfGlobalCap">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> % of global cap </th>
+      <td mat-cell *matCellDef="let metric"> {{metric.percentageOfGlobalCap}}% </td>
     </ng-container>
-    <ng-container matColumnDef="market_cap">
-      <th class="listings-table-header" mat-header-cell *matHeaderCellDef> Market Cap </th>
-      <td mat-cell *matCellDef="let listing"> ${{listing.marketCap}} </td>
+    <ng-container matColumnDef="current">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Current </th>
+      <td mat-cell *matCellDef="let metric"> ${{metric.current}} </td>
     </ng-container>
-    <ng-container matColumnDef="volume">
-      <th class="listings-table-header" mat-header-cell *matHeaderCellDef> Volume (24h) </th>
-      <td mat-cell *matCellDef="let listing"> ${{listing.volume24h}} </td>
+    <ng-container matColumnDef="tangibleCurrency">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Tangible currency </th>
+      <td mat-cell *matCellDef="let metric"> ${{metric.tangibleCurrency}} </td>
     </ng-container>
-    <ng-container matColumnDef="1h">
-      <th class="listings-table-header" mat-header-cell *matHeaderCellDef> %1h </th>
-      <td mat-cell *matCellDef="let listing"><span [ngClass]="{
-          'percentage-change-increase ': listing.percentChange24h >= 0,
-          'percentage-change-decrease': listing.percentChange24h < 0
-        }">{{listing.percentChange1h}}%</span></td>
+    <ng-container matColumnDef="worldsBillionaires">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> World's billionaires </th>
+      <td mat-cell *matCellDef="let metric"> ${{metric.worldsBillionaires}} </td>
     </ng-container>
-    <ng-container matColumnDef="24h">
-      <th class="listings-table-header" mat-header-cell *matHeaderCellDef> %24h </th>
-      <td mat-cell *matCellDef="let listing"><span [ngClass]="{
-          'percentage-change-increase ': listing.percentChange24h >= 0,
-          'percentage-change-decrease': listing.percentChange24h < 0
-        }">{{listing.percentChange24h}}%</span></td>
+    <ng-container matColumnDef="gold">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Gold </th>
+      <td mat-cell *matCellDef="let metric"> ${{metric.gold}} </td>
     </ng-container>
-    <ng-container matColumnDef="7d">
-      <th class="listings-table-header" mat-header-cell *matHeaderCellDef> %7d </th>
-      <td mat-cell *matCellDef="let listing"> <span [ngClass]="{
-          'percentage-change-increase ': listing.percentChange24h >= 0,
-          'percentage-change-decrease': listing.percentChange24h < 0
-        }"> {{listing.percentchange7d}}% </span></td>
+    <ng-container matColumnDef="stocks">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Stocks </th>
+      <td mat-cell *matCellDef="let metric"> ${{metric.stocks}} </td>
+    </ng-container>
+    <ng-container matColumnDef="narrowMoney">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Narrow money </th>
+      <td mat-cell *matCellDef="let metric"> ${{metric.narrowMoney}} </td>
+    </ng-container>
+    <ng-container matColumnDef="broadMoney">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Broad money </th>
+      <td mat-cell *matCellDef="let metric"> ${{metric.broadMoney}} </td>
+    </ng-container>
+    <ng-container matColumnDef="realEstate">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Real estate </th>
+      <td mat-cell *matCellDef="let metric"> ${{metric.realEstate}} </td>
+    </ng-container>
+    <ng-container matColumnDef="wealth">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Wealth </th>
+      <td mat-cell *matCellDef="let metric"> ${{metric.wealth}} </td>
+    </ng-container>
+    <ng-container matColumnDef="derivatives">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Derivatives </th>
+      <td mat-cell *matCellDef="let metric"> ${{metric.derivatives}} </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-  <mat-paginator class="listings-paginator" [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
+  <mat-paginator class="predictions-paginator" [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
 </div>
