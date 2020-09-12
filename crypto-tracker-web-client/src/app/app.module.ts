@@ -12,6 +12,7 @@ import { PredictionComponent } from './prediction/prediction.component';
 import { MatRippleModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { HeaderInfoComponent } from './header-info/header-info.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     PortfolioComponent,
     RankingComponent,
     PredictionComponent,
+    HeaderInfoComponent,
   ],
   imports: [
     BrowserModule,

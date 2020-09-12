@@ -11,18 +11,21 @@ import { GetListingOptions } from 'src/model/get-listing-options';
 import { ListingTable } from 'src/model/listing-table';
 import { GlobalMetrics } from 'src/model/global-metrics';
 import { GlobalMetricsTable } from 'src/model/global-metrics-table';
+import CurrencyValues from 'src/content/currencyValues.json';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CoinMarketCapService {
-  cryptoRankingListSubject: Subject<ListingTable[]> = new Subject<
+  cryptoRankingListTableSubject: Subject<ListingTable[]> = new Subject<
     ListingTable[]
   >();
 
-  globalMetricsSubject: Subject<GlobalMetricsTable[]> = new Subject<
+  globalMetricsTableSubject: Subject<GlobalMetricsTable[]> = new Subject<
     GlobalMetricsTable[]
   >();
+
+  globalMetricsSubject: Subject<GlobalMetrics> = new Subject<GlobalMetrics>();
 
   globalMetricsUrl = '/api/getGlobalMetrics';
   cryptoListingsUrl = '/api/getListings';
@@ -31,7 +34,7 @@ export class CoinMarketCapService {
   constructor(private http: HttpClient) {}
 
   getCryptoListingsObservable(): Observable<ListingTable[]> {
-    return this.cryptoRankingListSubject.asObservable();
+    return this.cryptoRankingListTableSubject.asObservable();
   }
 
   getCryptoList(getListingOption: GetListingOptions): void {
@@ -55,7 +58,7 @@ export class CoinMarketCapService {
             listingsTable.push(this.adaptCryptoListingModel(item))
           );
 
-          this.cryptoRankingListSubject.next(listingsTable);
+          this.cryptoRankingListTableSubject.next(listingsTable);
         },
         (error) => {
           console.log('Error occured', error);
@@ -81,11 +84,11 @@ export class CoinMarketCapService {
     return listing;
   }
 
-  getGlobalMetricsObservable(): Observable<GlobalMetricsTable[]> {
-    return this.globalMetricsSubject.asObservable();
+  getGlobalMetricsTableObservable(): Observable<GlobalMetricsTable[]> {
+    return this.globalMetricsTableSubject.asObservable();
   }
 
-  getGlobalMetrics(convert: string): void {
+  getGlobalMetricsTableData(convert: string): void {
     let httpParams = new HttpParams();
     Object.keys(this.getListingOption).forEach((key) => {
       httpParams = httpParams.set(key, this.getListingOption[key]);
@@ -115,13 +118,14 @@ export class CoinMarketCapService {
             )
           )
         );
-        this.globalMetricsSubject.next(globalMetricsTable);
+        this.globalMetricsTableSubject.next(globalMetricsTable);
       },
       (error) => {
         console.log('Error occured', error);
       }
     );
   }
+
   adaptGlobalMetricsModel(
     data: Datum,
     totalMarketCap: number
@@ -135,21 +139,85 @@ export class CoinMarketCapService {
       Math.round((data.quote.USD.market_cap / totalMarketCap) * 10000) / 100;
     globalMetricsTable.current = Math.round(data.quote.USD.price * 100) / 100;
     globalMetricsTable.tangibleCurrency =
-      Math.round(data.quote.USD.price * 100) / 100;
+      Math.round(
+        ((CurrencyValues.tangibleCurrency.currentValue *
+          globalMetricsTable.percentageOfGlobalCap) /
+          availableSupply) *
+          100
+      ) / 100;
     globalMetricsTable.worldsBillionaires =
-      Math.round(data.quote.USD.price * 100) / 100;
-    globalMetricsTable.gold = Math.round(data.quote.USD.price * 100) / 100;
-    globalMetricsTable.stocks = Math.round(data.quote.USD.price * 100) / 100;
+      Math.round(
+        ((CurrencyValues.billionaires.currentValue *
+          globalMetricsTable.percentageOfGlobalCap) /
+          availableSupply) *
+          100
+      ) / 100;
+    globalMetricsTable.gold =
+      Math.round(
+        ((CurrencyValues.gold.currentValue *
+          globalMetricsTable.percentageOfGlobalCap) /
+          availableSupply) *
+          100
+      ) / 100;
+    globalMetricsTable.stocks =
+      Math.round(
+        ((CurrencyValues.stocks.currentValue *
+          globalMetricsTable.percentageOfGlobalCap) /
+          availableSupply) *
+          100
+      ) / 100;
     globalMetricsTable.narrowMoney =
-      Math.round(data.quote.USD.price * 100) / 100;
+      Math.round(
+        ((CurrencyValues.narrowMoney.currentValue *
+          globalMetricsTable.percentageOfGlobalCap) /
+          availableSupply) *
+          100
+      ) / 100;
     globalMetricsTable.broadMoney =
-      Math.round(data.quote.USD.price * 100) / 100;
+      Math.round(
+        ((CurrencyValues.broadMoney.currentValue *
+          globalMetricsTable.percentageOfGlobalCap) /
+          availableSupply) *
+          100
+      ) / 100;
     globalMetricsTable.realEstate =
-      Math.round(data.quote.USD.price * 100) / 100;
-    globalMetricsTable.wealth = Math.round(data.quote.USD.price * 100) / 100;
+      Math.round(
+        ((CurrencyValues.realEstate.currentValue *
+          globalMetricsTable.percentageOfGlobalCap) /
+          availableSupply) *
+          100
+      ) / 100;
+    globalMetricsTable.wealth =
+      Math.round(
+        ((CurrencyValues.wealth.currentValue *
+          globalMetricsTable.percentageOfGlobalCap) /
+          availableSupply) *
+          100
+      ) / 100;
     globalMetricsTable.derivatives =
-      Math.round(data.quote.USD.price * 100) / 100;
-
+      Math.round(
+        ((CurrencyValues.derivatives.currentValue *
+          globalMetricsTable.percentageOfGlobalCap) /
+          availableSupply) *
+          100
+      ) / 100;
     return globalMetricsTable;
+  }
+
+  getGlobalMetricsObservable(): Observable<GlobalMetrics> {
+    return this.globalMetricsSubject.asObservable();
+  }
+
+  getGlobalMetricsData(convert: string): void {
+    const httpParams = new HttpParams().set('convert', convert);
+    const httpOptions = {
+      params: httpParams,
+    };
+
+    this.http
+      .get(this.globalMetricsUrl, httpOptions)
+      .subscribe((data: GlobalMetrics) => {
+        this.globalMetricsSubject.next(data);
+      });
   }
 }

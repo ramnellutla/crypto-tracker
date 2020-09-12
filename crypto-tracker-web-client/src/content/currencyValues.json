@@ -1,0 +1,38 @@
+{
+  "tangibleCurrency": {
+    "currentValue": 6600000000000,
+    "columnDisplay": "6.6 T"
+  },
+  "billionaires": {
+    "currentValue": 8000000000000,
+    "columnDisplay": "8 T"
+  },
+  "gold": {
+    "currentValue": 10900000000000,
+    "columnDisplay": "10.9 T"
+  },
+  "stocks": {
+    "currentValue": 89500000000000,
+    "columnDisplay": "89.5 T"
+  },
+  "narrowMoney": {
+    "currentValue": 35200000000000,
+    "columnDisplay": "35.2 T"
+  },
+  "broadMoney": {
+    "currentValue": 95700000000000,
+    "columnDisplay": "95.7 T"
+  },
+  "realEstate": {
+    "currentValue": 280600000000000,
+    "columnDisplay": "280.6 T"
+  },
+  "wealth": {
+    "currentValue": 360600000000000,
+    "columnDisplay": "360.6 T"
+  },
+  "derivatives": {
+    "currentValue": 558500000000000,
+    "columnDisplay": "558.5 T"
+  }
+}

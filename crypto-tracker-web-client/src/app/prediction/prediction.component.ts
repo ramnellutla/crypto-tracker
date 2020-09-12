@@ -4,7 +4,7 @@ import { GlobalMetricsTable } from 'src/model/global-metrics-table';
 import { CoinMarketCapService } from 'src/services/coin-market-cap.service';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
-import { GetListingOptions } from 'src/model/get-listing-options';
+import CurrencyValues from 'src/content/currencyValues.json';
 
 @Component({
   selector: 'app-prediction',
@@ -12,13 +12,16 @@ import { GetListingOptions } from 'src/model/get-listing-options';
   styleUrls: ['./prediction.component.less'],
 })
 export class PredictionComponent implements OnInit {
-  globalMetricsObseravble: Observable<GlobalMetricsTable[]>;
-  globalMetricsSubscription: Subscription;
+  globalMetricsTableObseravble: Observable<GlobalMetricsTable[]>;
+  globalMetricsTableSubscription: Subscription;
   globalMetricsError = false;
   globalMetricsErrorSubscription: Subscription;
   globalMetricsErrorSubject: Subject<boolean> = new Subject<boolean>();
+  currencyValues: any;
 
-  constructor(private coinMarketCapService: CoinMarketCapService) {}
+  constructor(private coinMarketCapService: CoinMarketCapService) {
+    this.currencyValues = CurrencyValues;
+  }
   dataSource = new MatTableDataSource<GlobalMetricsTable>();
   displayedColumns = [
     'asset',
@@ -26,8 +29,8 @@ export class PredictionComponent implements OnInit {
     'percentageOfGlobalCap',
     'current',
     'tangibleCurrency',
-    'worldsBillionaires',
-    'gold',
+    /*     'worldsBillionaires',
+     */ 'gold',
     'stocks',
     'narrowMoney',
     'broadMoney',
@@ -39,13 +42,13 @@ export class PredictionComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit(): void {
-    this.globalMetricsObseravble = this.coinMarketCapService.getGlobalMetricsObservable();
-    this.globalMetricsSubscription = this.globalMetricsObseravble.subscribe(
+    this.globalMetricsTableObseravble = this.coinMarketCapService.getGlobalMetricsTableObservable();
+    this.globalMetricsTableSubscription = this.globalMetricsTableObseravble.subscribe(
       (data) => {
         this.dataSource.data = data;
       }
     );
-    this.coinMarketCapService.getGlobalMetrics('USD');
+    this.coinMarketCapService.getGlobalMetricsTableData('USD');
   }
 
   ngAfterViewInit(): void {

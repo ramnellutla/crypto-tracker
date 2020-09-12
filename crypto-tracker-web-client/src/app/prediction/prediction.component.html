@@ -1,55 +1,64 @@
 <div>
   <table mat-table [dataSource]="dataSource" class="predictions-table mat-elevation-z7">
-    <ng-container matColumnDef="asset">
+    <ng-container class="predictions-column" matColumnDef="asset">
       <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Asset </th>
       <td mat-cell *matCellDef="let metric"> {{metric.asset}} </td>
     </ng-container>
-    <ng-container matColumnDef="symbol">
+    <ng-container class="predictions-column" matColumnDef="symbol">
       <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Ticker </th>
       <td mat-cell *matCellDef="let metric"> {{metric.symbol}} </td>
     </ng-container>
-    <ng-container matColumnDef="percentageOfGlobalCap">
+    <ng-container class="predictions-column" matColumnDef="percentageOfGlobalCap">
       <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> % of global cap </th>
       <td mat-cell *matCellDef="let metric"> {{metric.percentageOfGlobalCap}}% </td>
     </ng-container>
-    <ng-container matColumnDef="current">
+    <ng-container class="predictions-column" matColumnDef="current">
       <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Current </th>
       <td mat-cell *matCellDef="let metric"> ${{metric.current}} </td>
     </ng-container>
-    <ng-container matColumnDef="tangibleCurrency">
-      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Tangible currency </th>
+    <ng-container class="predictions-column" class="predictions-column" matColumnDef="tangibleCurrency">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Tangible currency
+        ({{currencyValues.tangibleCurrency.columnDisplay}}) </th>
       <td mat-cell *matCellDef="let metric"> ${{metric.tangibleCurrency}} </td>
     </ng-container>
-    <ng-container matColumnDef="worldsBillionaires">
-      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> World's billionaires </th>
+    <!--     <ng-container class="predictions-column" matColumnDef="worldsBillionaires">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> World's billionaires (
+        {{currencyValues.billionaires.columnDisplay}}) </th>
       <td mat-cell *matCellDef="let metric"> ${{metric.worldsBillionaires}} </td>
-    </ng-container>
-    <ng-container matColumnDef="gold">
-      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Gold </th>
+    </ng-container> -->
+    <ng-container class="predictions-column" matColumnDef="gold">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Gold
+        ({{currencyValues.gold.columnDisplay}})</th>
       <td mat-cell *matCellDef="let metric"> ${{metric.gold}} </td>
     </ng-container>
-    <ng-container matColumnDef="stocks">
-      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Stocks </th>
+    <ng-container class="predictions-column" matColumnDef="stocks">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Stocks
+        ({{currencyValues.stocks.columnDisplay}})</th>
       <td mat-cell *matCellDef="let metric"> ${{metric.stocks}} </td>
     </ng-container>
-    <ng-container matColumnDef="narrowMoney">
-      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Narrow money </th>
+    <ng-container class="predictions-column" matColumnDef="narrowMoney">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Narrow money
+        ({{currencyValues.narrowMoney.columnDisplay}})</th>
       <td mat-cell *matCellDef="let metric"> ${{metric.narrowMoney}} </td>
     </ng-container>
-    <ng-container matColumnDef="broadMoney">
-      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Broad money </th>
+    <ng-container class="predictions-column" matColumnDef="broadMoney">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Broad
+        money({{currencyValues.broadMoney.columnDisplay}}) </th>
       <td mat-cell *matCellDef="let metric"> ${{metric.broadMoney}} </td>
     </ng-container>
-    <ng-container matColumnDef="realEstate">
-      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Real estate </th>
+    <ng-container class="predictions-column" matColumnDef="realEstate">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Real estate
+        ({{currencyValues.realEstate.columnDisplay}})</th>
       <td mat-cell *matCellDef="let metric"> ${{metric.realEstate}} </td>
     </ng-container>
-    <ng-container matColumnDef="wealth">
-      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Wealth </th>
+    <ng-container class="predictions-column" matColumnDef="wealth">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Wealth
+        ({{currencyValues.wealth.columnDisplay}})</th>
       <td mat-cell *matCellDef="let metric"> ${{metric.wealth}} </td>
     </ng-container>
-    <ng-container matColumnDef="derivatives">
-      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Derivatives </th>
+    <ng-container class="predictions-column" matColumnDef="derivatives">
+      <th class="predictions-table-header" mat-header-cell *matHeaderCellDef> Derivatives
+        ({{currencyValues.derivatives.columnDisplay}})</th>
       <td mat-cell *matCellDef="let metric"> ${{metric.derivatives}} </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
