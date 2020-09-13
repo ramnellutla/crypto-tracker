@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CoinMarketCapService } from 'src/services/coin-market-cap.service';
+import { CoinMarketCapService } from 'src/services/coin-market-cap/coin-market-cap.service';
 import { Observable, Subscription } from 'rxjs';
 import { GlobalMetrics } from 'src/model/global-metrics';
 

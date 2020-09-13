@@ -10,7 +10,7 @@ export enum TabName {
   providedIn: 'root',
 })
 export class NavigationStatusService {
-  currentActiveTab: TabName = TabName.portfolio;
+  currentActiveTab: string = TabName.portfolio.toString();
 
   constructor() {}
 }

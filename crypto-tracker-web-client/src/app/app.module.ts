@@ -9,6 +9,7 @@ import { PortfolioComponent } from './portfolio/portfolio.component';
 import { RankingComponent } from './ranking/ranking.component';
 import { PredictionComponent } from './prediction/prediction.component';
 
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatRippleModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -22,6 +23,7 @@ import { HeaderInfoComponent } from './header-info/header-info.component';
     RankingComponent,
     PredictionComponent,
     HeaderInfoComponent,
+    BrowserModule,
   ],
   imports: [
     BrowserModule,
@@ -30,6 +32,7 @@ import { HeaderInfoComponent } from './header-info/header-info.component';
     MatPaginatorModule,
     MatTableModule,
     HttpClientModule,
+    MatTabsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {
   NavigationStatusService,
   TabName,
-} from 'src/services/navigation-status.service';
+} from 'src/services/navigation-status/navigation-status.service';
 import { GetListingOptions } from 'src/model/get-listing-options';
-import { CoinMarketCapService } from 'src/services/coin-market-cap.service';
+import { CoinMarketCapService } from 'src/services/coin-market-cap/coin-market-cap.service';
 
 @Component({
   selector: 'app-navigation',
@@ -36,8 +36,7 @@ export class NavigationComponent implements OnInit {
         routerLinkActiveOptions: 'active',
         styleClass: 'left-menu-items',
         title: TabName.portfolio,
-        imageSource:
-          'https://img.icons8.com/plasticine/64/000000/investment-portfolio.png',
+        imageSource: 'assets/img/Portfolio.png',
       },
       {
         label: 'Ranking',
@@ -45,8 +44,7 @@ export class NavigationComponent implements OnInit {
         routerLinkActiveOptions: 'active',
         styleClass: 'right-menu-items',
         title: TabName.ranking,
-        imageSource:
-          'https://img.icons8.com/cotton/64/000000/leaderboard--v1.png',
+        imageSource: 'assets/img/Ranking.png',
       },
       {
         label: 'Predictions',
@@ -54,16 +52,26 @@ export class NavigationComponent implements OnInit {
         routerLinkActiveOptions: 'active',
         styleClass: 'right-menu-items',
         title: TabName.predictions,
-        imageSource: 'https://img.icons8.com/nolan/64/future.png',
+        imageSource: 'assets/img/Predictions.png',
       },
     ];
   }
 
-  setCurrentActiveTabToHome() {
-    this.navigationStatusService.currentActiveTab = TabName.portfolio;
+  getCurrentTabImage() {
+    return (
+      'assets/img/' + this.navigationStatusService.currentActiveTab + '.png'
+    );
+  }
+
+  getCurrentActiveTab() {
+    return this.navigationStatusService.currentActiveTab;
+  }
+
+  setCurrentActiveTab(tabName: string) {
+    this.navigationStatusService.currentActiveTab = tabName;
   }
 
   isActive(tabName: string): boolean {
-    return this.navigationStatusService.currentActiveTab.toString() === tabName;
+    return this.navigationStatusService.currentActiveTab === tabName;
   }
 }

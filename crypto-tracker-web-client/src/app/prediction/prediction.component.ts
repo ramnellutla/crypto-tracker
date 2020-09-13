@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { GlobalMetricsTable } from 'src/model/global-metrics-table';
-import { CoinMarketCapService } from 'src/services/coin-market-cap.service';
+import { CoinMarketCapService } from 'src/services/coin-market-cap/coin-market-cap.service';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import CurrencyValues from 'src/content/currencyValues.json';
@@ -25,8 +25,8 @@ export class PredictionComponent implements OnInit {
   dataSource = new MatTableDataSource<GlobalMetricsTable>();
   displayedColumns = [
     'asset',
-    'symbol',
-    'percentageOfGlobalCap',
+    /*     'symbol',
+     */ 'percentageOfGlobalCap',
     'current',
     'tangibleCurrency',
     /*     'worldsBillionaires',

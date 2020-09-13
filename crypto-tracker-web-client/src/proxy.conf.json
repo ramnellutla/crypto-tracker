@@ -10,5 +10,11 @@
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true
+  },
+  "/api/getPortfolio": {
+    "target": "http://localhost:5002",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
   }
 }

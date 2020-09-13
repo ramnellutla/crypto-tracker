@@ -1,7 +1,14 @@
 <div class="app-navigation-bar">
-  <nav class="app-navigation-bar-tabs">
-    <img *ngFor="let tab of items" class="app-navigation-bar-icon" (click)="setCurrentActiveTabToHome()"
-      routerLink="{{tab.routerLink}}" src="{{tab.imageSource}}" title="{{tab.title}}" />
+  <div matRipple>
+    <img class="app-navigation-bar-icon" src="{{getCurrentTabImage()}}" title="{{getCurrentActiveTab()}}" />
+  </div>
+  <nav>
+    <!--       <img *ngFor="let tab of items" class="app-navigation-bar-icon" (click)="setCurrentActiveTab(tab.title)"
+        routerLink="{{tab.routerLink}}" src="{{tab.imageSource}}" title="{{tab.title}}" /> -->
+    <a mat-tab-link *ngFor="let tab of items" routerLink="{{tab.routerLink}}" title="{{tab.title}}"
+      [active]="isActive(tab.title)">
+      {{tab.label}}
+    </a>
   </nav>
 </div>
 <app-header-info></app-header-info>

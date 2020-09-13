@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Subject, Subscription, Observable } from 'rxjs';
-import { CoinMarketCapService } from 'src/services/coin-market-cap.service';
+import { CoinMarketCapService } from 'src/services/coin-market-cap/coin-market-cap.service';
 import { GetListingOptions } from 'src/model/get-listing-options';
 import { ListingTable } from 'src/model/listing-table';
 import { MatPaginator } from '@angular/material/paginator';

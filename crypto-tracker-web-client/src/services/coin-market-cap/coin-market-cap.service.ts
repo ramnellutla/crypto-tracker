@@ -48,22 +48,19 @@ export class CoinMarketCapService {
       params: httpParams,
     };
 
-    this.http
-      .get(this.cryptoListingsUrl, httpOptions)
-      .pipe()
-      .subscribe(
-        (listings: CryptoListing) => {
-          const listingsTable = [];
-          listings.data.forEach((item) =>
-            listingsTable.push(this.adaptCryptoListingModel(item))
-          );
+    this.http.get(this.cryptoListingsUrl, httpOptions).subscribe(
+      (listings: CryptoListing) => {
+        const listingsTable = [];
+        listings.data.forEach((item) =>
+          listingsTable.push(this.adaptCryptoListingModel(item))
+        );
 
-          this.cryptoRankingListTableSubject.next(listingsTable);
-        },
-        (error) => {
-          console.log('Error occured', error);
-        }
-      );
+        this.cryptoRankingListTableSubject.next(listingsTable);
+      },
+      (error) => {
+        console.log('Error occured', error);
+      }
+    );
   }
 
   adaptCryptoListingModel(data: Datum): ListingTable {
@@ -71,9 +68,9 @@ export class CoinMarketCapService {
     listing.rank = data.cmc_rank;
     listing.asset = data.name;
     listing.symbol = data.symbol;
-    listing.price = data.quote.USD.price;
-    listing.marketCap = data.quote.USD.market_cap;
-    listing.volume24h = data.quote.USD.volume_24h;
+    listing.price = Math.round(data.quote.USD.price * 100) / 100;
+    listing.marketCap = Math.round(data.quote.USD.market_cap * 100) / 100;
+    listing.volume24h = Math.round(data.quote.USD.volume_24h * 100) / 100;
     listing.percentChange1h =
       Math.round(data.quote.USD.percent_change_1h * 100) / 100;
     listing.percentChange24h =
