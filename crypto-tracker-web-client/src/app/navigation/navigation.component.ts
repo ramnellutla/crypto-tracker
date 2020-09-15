@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   NavigationStatusService,
   TabName,
 } from 'src/services/navigation-status/navigation-status.service';
-import { GetListingOptions } from 'src/model/get-listing-options';
-import { CoinMarketCapService } from 'src/services/coin-market-cap/coin-market-cap.service';
+import { MatMenuTrigger } from '@angular/material/menu';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { LoginPageComponent } from '../login-page/login-page.component';
 
 @Component({
   selector: 'app-navigation',
@@ -15,9 +20,12 @@ export class NavigationComponent implements OnInit {
   items: any[];
   portfolio: any;
   rippleColor: 'yellow';
+  userLoggedIn: boolean;
+
+  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   constructor(
     private navigationStatusService: NavigationStatusService,
-    private coinMarketCapService: CoinMarketCapService
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -73,5 +81,18 @@ export class NavigationComponent implements OnInit {
 
   isActive(tabName: string): boolean {
     return this.navigationStatusService.currentActiveTab === tabName;
+  }
+
+  getLoginLogoutImage(): string {
+    return this.userLoggedIn
+      ? 'https://img.icons8.com/ios-glyphs/30/000000/logout-rounded-left.png'
+      : 'https://img.icons8.com/ios-glyphs/16/48/login-rounded-right.png';
+  }
+
+  openLoginLogoutDialog() {
+    const dialogRef = this.dialog.open(LoginPageComponent, {
+      width: '500px',
+      data: { name: 'Login' },
+    });
   }
 }

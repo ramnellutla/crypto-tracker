@@ -5,6 +5,10 @@ import { CoinMarketCapService } from 'src/services/coin-market-cap/coin-market-c
 import { Observable, Subscription, Subject } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import CurrencyValues from 'src/content/currencyValues.json';
+import {
+  NavigationStatusService,
+  TabName,
+} from 'src/services/navigation-status/navigation-status.service';
 
 @Component({
   selector: 'app-prediction',
@@ -19,7 +23,11 @@ export class PredictionComponent implements OnInit {
   globalMetricsErrorSubject: Subject<boolean> = new Subject<boolean>();
   currencyValues: any;
 
-  constructor(private coinMarketCapService: CoinMarketCapService) {
+  constructor(
+    private coinMarketCapService: CoinMarketCapService,
+    private navigationStatusService: NavigationStatusService
+  ) {
+    this.navigationStatusService.currentActiveTab = TabName.predictions.toString();
     this.currencyValues = CurrencyValues;
   }
   dataSource = new MatTableDataSource<GlobalMetricsTable>();

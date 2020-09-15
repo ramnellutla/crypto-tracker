@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>{{data.name}}</h1>
+<div mat-dialog-content>
+  <mat-form-field class="app-login-page-form-field" appearance="fill">
+    <mat-label>Username</mat-label>
+    <input matInput [(ngModel)]="data.username">
+  </mat-form-field>
+  <mat-form-field class="app-login-page-form-field" appearance="fill">
+    <mat-label>Password</mat-label>
+    <input matInput [(ngModel)]="data.password">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onSingupClick()" routerLink="/signup">Signup</button>
+  <button [disabled]="isLoginDataInvalid()" mat-button (click)="login()" [mat-dialog-close]="data"
+    cdkFocusInitial>Login</button>
+</div>

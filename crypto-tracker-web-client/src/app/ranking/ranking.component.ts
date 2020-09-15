@@ -5,6 +5,10 @@ import { GetListingOptions } from 'src/model/get-listing-options';
 import { ListingTable } from 'src/model/listing-table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import {
+  NavigationStatusService,
+  TabName,
+} from 'src/services/navigation-status/navigation-status.service';
 
 @Component({
   selector: 'app-ranking',
@@ -20,7 +24,12 @@ export class RankingComponent implements OnInit, AfterViewInit {
   cryptoRankListErrorSubscription: Subscription;
   cryptoRankListErrorSubject: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private coinMarketCapService: CoinMarketCapService) {}
+  constructor(
+    private coinMarketCapService: CoinMarketCapService,
+    private navigationStatusService: NavigationStatusService
+  ) {
+    this.navigationStatusService.currentActiveTab = TabName.ranking.toString();
+  }
   dataSource = new MatTableDataSource<ListingTable>();
   displayedColumns = [
     'rank',

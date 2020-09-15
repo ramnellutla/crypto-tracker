@@ -1,15 +1,26 @@
 <div class="app-navigation-bar">
-  <div matRipple>
-    <img class="app-navigation-bar-icon" src="{{getCurrentTabImage()}}" title="{{getCurrentActiveTab()}}" />
+  <div class="app-navigation-bar-tab-icon" matRipple>
+    <img src="{{getCurrentTabImage()}}" title="{{getCurrentActiveTab()}}" />
   </div>
-  <nav>
-    <!--       <img *ngFor="let tab of items" class="app-navigation-bar-icon" (click)="setCurrentActiveTab(tab.title)"
-        routerLink="{{tab.routerLink}}" src="{{tab.imageSource}}" title="{{tab.title}}" /> -->
+  <nav mat-tab-nav-bar class="app-navigation-bar-tabs" mat-align-tabs="center">
     <a mat-tab-link *ngFor="let tab of items" routerLink="{{tab.routerLink}}" title="{{tab.title}}"
       [active]="isActive(tab.title)">
       {{tab.label}}
     </a>
   </nav>
+  <div [matMenuTriggerFor]="menu" class="app-navigation-bar-user-icon-container" matRipple>
+    <img class="app-navigation-bar-user-icon" src="https://img.icons8.com/fluent/48/000000/user-male-circle.png" />
+  </div>
+  <mat-menu #menu="matMenu">
+    <button class="app-navigation-menu-item" *ngIf="userLoggedIn" mat-menu-item>
+      <img class="app-navigation-menu-item-image" src="https://img.icons8.com/wired/16/48/settings.png" />
+      <span class="app-navigation-menu-item-content">Settings</span>
+    </button>
+    <button class="app-navigation-menu-item" (click)="openLoginLogoutDialog()" mat-menu-item>
+      <img class="app-navigation-menu-item-image" src="{{getLoginLogoutImage()}}" />
+      <span class="app-navigation-menu-item-content">{{userLoggedIn ? 'Logout' : 'Login' }}</span>
+    </button>
+  </mat-menu>
 </div>
 <app-header-info></app-header-info>
 <router-outlet></router-outlet>

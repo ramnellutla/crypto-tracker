@@ -5,6 +5,10 @@ import { CoinMarketCapService } from 'src/services/coin-market-cap/coin-market-c
 import { GetListingOptions } from 'src/model/get-listing-options';
 import { UserPortfolioService } from 'src/services/user-portfolio/user-portfolio.service';
 import { PortfolioTable } from 'src/model/portfolio-table';
+import {
+  TabName,
+  NavigationStatusService,
+} from 'src/services/navigation-status/navigation-status.service';
 
 @Component({
   selector: 'app-portfolio',
@@ -15,9 +19,11 @@ export class PortfolioComponent implements OnInit {
   userPortfolioObservable: any;
   userPortfolioSubscription: any;
   constructor(
-    private coinMarketCapService: CoinMarketCapService,
-    private userPortfolioService: UserPortfolioService
-  ) {}
+    private userPortfolioService: UserPortfolioService,
+    private navigationStatusService: NavigationStatusService
+  ) {
+    this.navigationStatusService.currentActiveTab = TabName.portfolio.toString();
+  }
 
   dataSource = new MatTableDataSource<PortfolioTable>();
   displayedColumns = [
