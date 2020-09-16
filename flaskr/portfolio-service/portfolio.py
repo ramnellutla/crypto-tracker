@@ -1,11 +1,42 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 import requests
 import json
+from functools import wraps
+import jwt
+
 app = Flask(__name__)
 
 
+f = open(r'..\secretKey.txt', 'r')
+SECRET_KEY = f.read()
+
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 401
+
+        try:
+            data = jwt.decode(token, SECRET_KEY)
+            current_user = data['username']
+
+        except:
+            return jsonify({'message': 'Token is invalid!'}), 401
+
+        return f(current_user, *args, **kwargs)
+
+    return decorated
+
+
 @app.route('/api/getPortfolio')
+@token_required
 def getPortfolio():
     try:
         response = [{

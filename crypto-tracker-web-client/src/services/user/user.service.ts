@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User } from 'src/model/user';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,13 +11,11 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  login(user: User) {
+  login(user: User): Observable<User> {
     const postData = {
-      userName: user.username,
+      username: user.username,
       password: user.password,
     };
-    this.http.post<User>(this.loginUrl, postData).subscribe((data) => {});
-
-    console.log(user.username, user.password);
+    return this.http.post<User>(this.loginUrl, postData);
   }
 }

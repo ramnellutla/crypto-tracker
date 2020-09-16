@@ -19,6 +19,9 @@ export class LoginPageComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private userService: UserService
   ) {}
+  displayLoginFailed = false;
+  loginFailedText = '';
+  hidePassword = true;
   ngOnInit(): void {}
 
   onSingupClick(): void {
@@ -26,7 +29,19 @@ export class LoginPageComponent implements OnInit {
   }
 
   login(): void {
-    this.userService.login(this.data);
+    this.userService.login(this.data).subscribe(
+      (data) => {
+        this.dialogRef.close();
+      },
+      (error) => {
+        this.displayLoginFailed = true;
+        if (error.status === 401) {
+          this.loginFailedText = 'Invalid credentials. Please try again.';
+          return;
+        }
+        this.loginFailedText = 'Unable to login.';
+      }
+    );
   }
 
   isLoginDataInvalid(): boolean {

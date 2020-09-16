@@ -23,6 +23,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { SignupPageComponent } from './signup-page/signup-page.component';
 
 @NgModule({
@@ -52,6 +53,7 @@ import { SignupPageComponent } from './signup-page/signup-page.component';
     FormsModule,
     MatInputModule,
     MatButtonModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
