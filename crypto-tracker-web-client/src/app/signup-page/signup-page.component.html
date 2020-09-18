@@ -1,1 +1,40 @@
-<p>signup-page works!</p>
+<mat-card *ngIf="!hideSignupPage && !userLoggedIn" class="app-signup-page-form-container">
+  <div class="app-signup-page-form-content">
+    <mat-card-title>Sign up</mat-card-title>
+    <mat-card-content>
+      <mat-form-field class="app-signup-page-form-field">
+        <mat-label>Username</mat-label>
+        <input matInput [(ngModel)]="data.username">
+      </mat-form-field>
+      <mat-form-field class="app-signup-page-form-field">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="data.password">
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hidePassword">
+          <mat-icon *ngIf="data.password">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="app-signup-page-form-field">
+        <mat-label>Confirm password</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="confirmPassword">
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hidePassword">
+          <mat-icon *ngIf="data.password">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+      <span *ngIf="data.password && confirmPassword && confirmPassword != data.password"
+        class="app-signup-page-password-mismatch">
+        *password and confirm password did not mismatch
+      </span>
+    </mat-card-content>
+    <mat-card-footer class="app-signup-page-buttons">
+      <button class="app-signup-page-login-button" mat-button (click)="login()" cdkFocusInitial>Login</button>
+      <button [disabled]="!data.username || !data.password || confirmPassword && confirmPassword !== data.password"
+        mat-button (click)="onSignup()">Signup</button>
+    </mat-card-footer>
+  </div>
+</mat-card>
+<div *ngIf="userLoggedIn" class="app-signup-page-signout-text">
+  <span>Please</span><span class="app-signup-page-signout-link" (click)="logout()"> signout </span><span>to create a
+    new account</span>
+</div>

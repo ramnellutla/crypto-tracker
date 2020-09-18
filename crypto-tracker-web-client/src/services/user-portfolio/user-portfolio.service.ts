@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { PortfolioTable } from 'src/model/portfolio-table';
-import { HttpParams, HttpClient } from '@angular/common/http';
+import { HttpParams, HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +11,7 @@ export class UserPortfolioService {
     PortfolioTable[]
   >();
   userPortfolioUrl = '/api/getPortfolio';
+
   constructor(private http: HttpClient) {}
 
   getUserPortfolioObservable(): Observable<PortfolioTable[]> {
@@ -22,8 +23,14 @@ export class UserPortfolioService {
       .set('convert', convert)
       .set('userID', userID);
 
+    const httpHeaders = new HttpHeaders().set(
+      'bearerToken',
+      localStorage.getItem('bearerToken')
+    );
+
     const httpOptions = {
       params: httpParamas,
+      headers: httpHeaders,
     };
 
     this.http

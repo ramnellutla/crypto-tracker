@@ -10,6 +10,8 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { LoginPageComponent } from '../login-page/login-page.component';
+import { Observable, Subscription } from 'rxjs';
+import { UserService } from 'src/services/user/user.service';
 
 @Component({
   selector: 'app-navigation',
@@ -19,23 +21,27 @@ import { LoginPageComponent } from '../login-page/login-page.component';
 export class NavigationComponent implements OnInit {
   items: any[];
   portfolio: any;
-  rippleColor: 'yellow';
   userLoggedIn: boolean;
+  userLoginObservable: Observable<boolean>;
+  userLoginSubscription: Subscription;
 
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   constructor(
     private navigationStatusService: NavigationStatusService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
-    this.portfolio = {
-      label: 'Portfolio',
-      routerLink: '/home',
-      routerLinkActiveOptions: 'active',
-      styleClass: 'left-menu-items',
-      title: 'Portfolio',
-    };
+    this.userLoginObservable = this.userService.getUserLoginObservable();
+
+    this.userLoginSubscription = this.userLoginObservable.subscribe((data) => {
+      this.userLoggedIn = data;
+    });
+
+    if (this.userService.isLoggedIn()) {
+      this.userLoggedIn = true;
+    }
 
     this.items = [
       {
@@ -65,17 +71,17 @@ export class NavigationComponent implements OnInit {
     ];
   }
 
-  getCurrentTabImage() {
+  getCurrentTabImage(): string {
     return (
       'assets/img/' + this.navigationStatusService.currentActiveTab + '.png'
     );
   }
 
-  getCurrentActiveTab() {
+  getCurrentActiveTab(): string {
     return this.navigationStatusService.currentActiveTab;
   }
 
-  setCurrentActiveTab(tabName: string) {
+  setCurrentActiveTab(tabName: string): void {
     this.navigationStatusService.currentActiveTab = tabName;
   }
 
@@ -89,10 +95,20 @@ export class NavigationComponent implements OnInit {
       : 'https://img.icons8.com/ios-glyphs/16/48/login-rounded-right.png';
   }
 
-  openLoginLogoutDialog() {
-    const dialogRef = this.dialog.open(LoginPageComponent, {
-      width: '500px',
-      data: { name: 'Login' },
-    });
+  openLoginLogoutDialog(): void {
+    if (!this.userLoggedIn) {
+      const dialogRef = this.dialog.open(LoginPageComponent, {
+        width: '500px',
+        data: { name: 'Login' },
+      });
+      return;
+    }
+    this.userService.logout();
+  }
+
+  isActiveTabNone(): boolean {
+    return (
+      this.navigationStatusService.currentActiveTab === TabName.none.toString()
+    );
   }
 }

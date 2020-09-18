@@ -17,8 +17,8 @@ def token_required(f):
     def decorated(*args, **kwargs):
         token = None
 
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
+        if 'bearerToken' in request.headers:
+            token = request.headers['bearerToken']
 
         if not token:
             return jsonify({'message': 'Token is missing!'}), 401
@@ -37,7 +37,7 @@ def token_required(f):
 
 @app.route('/api/getPortfolio')
 @token_required
-def getPortfolio():
+def getPortfolio(current_user):
     try:
         response = [{
             'asset': "BitCoin",

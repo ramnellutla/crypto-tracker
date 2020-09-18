@@ -1,0 +1,46 @@
+@import "..\..\styles\_colors.less";
+
+.app-signup-page-form-container {
+  width: 50%;
+  height: 45%;
+  margin: 4rem auto;
+
+  .app-signup-page-form-content {
+    margin: 1rem 4rem;
+
+    .app-signup-page-form-field {
+      display: block;
+      margin-top: 1rem;
+    }
+
+    .app-signup-page-login-button {
+      color: @app-secondary-major;
+    }
+
+    .app-signup-page-buttons {
+      float: right;
+      margin-right: 1rem;
+    }
+
+    .app-signup-page-password-mismatch {
+      color: @app-primary-decrease;
+    }
+  }
+}
+
+.app-signup-page-signout-text {
+  font-weight: normal;
+  font-size: large;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  .app-signup-page-signout-link {
+    cursor: pointer;
+    color: @app-secondary-major;
+    align-items: center;
+  }
+}

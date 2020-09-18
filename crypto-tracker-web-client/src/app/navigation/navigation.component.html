@@ -1,5 +1,5 @@
 <div class="app-navigation-bar">
-  <div class="app-navigation-bar-tab-icon" matRipple>
+  <div *ngIf="!isActiveTabNone()" class="app-navigation-bar-tab-icon" matRipple>
     <img src="{{getCurrentTabImage()}}" title="{{getCurrentActiveTab()}}" />
   </div>
   <nav mat-tab-nav-bar class="app-navigation-bar-tabs" mat-align-tabs="center">
@@ -13,11 +13,9 @@
   </div>
   <mat-menu #menu="matMenu">
     <button class="app-navigation-menu-item" *ngIf="userLoggedIn" mat-menu-item>
-      <img class="app-navigation-menu-item-image" src="https://img.icons8.com/wired/16/48/settings.png" />
       <span class="app-navigation-menu-item-content">Settings</span>
     </button>
     <button class="app-navigation-menu-item" (click)="openLoginLogoutDialog()" mat-menu-item>
-      <img class="app-navigation-menu-item-image" src="{{getLoginLogoutImage()}}" />
       <span class="app-navigation-menu-item-content">{{userLoggedIn ? 'Logout' : 'Login' }}</span>
     </button>
   </mat-menu>

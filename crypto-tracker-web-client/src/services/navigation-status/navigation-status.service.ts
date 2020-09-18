@@ -4,6 +4,7 @@ export enum TabName {
   portfolio = 'Portfolio',
   ranking = 'Ranking',
   predictions = 'Predictions',
+  none = 'None',
 }
 
 @Injectable({

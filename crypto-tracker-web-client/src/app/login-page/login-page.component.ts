@@ -31,6 +31,7 @@ export class LoginPageComponent implements OnInit {
   login(): void {
     this.userService.login(this.data).subscribe(
       (data) => {
+        this.userService.setSession(data);
         this.dialogRef.close();
       },
       (error) => {

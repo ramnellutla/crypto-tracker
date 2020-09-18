@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="userLoggedIn">
   <table mat-table [dataSource]="dataSource" class="portfolio-table mat-elevation-z7">
     <ng-container matColumnDef="asset">
       <th class="portfolio-table-header" mat-header-cell *matHeaderCellDef> Asset </th>
@@ -45,4 +45,9 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
   <mat-paginator class="portfolio-paginator" [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
+</div>
+<div *ngIf="!userLoggedIn" class="portfolio-login-text">
+  <span>Please </span> <span class="portfolio-login-link-text" (click)="login()">login</span> <span> to see your
+    portfolio or </span> <span class="portfolio-login-link-text" routerLink="/signup">create an
+    account</span>
 </div>

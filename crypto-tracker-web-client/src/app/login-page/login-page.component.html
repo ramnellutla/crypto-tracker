@@ -9,12 +9,12 @@
     <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="data.password">
     <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
       [attr.aria-pressed]="hidePassword">
-      <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <mat-icon *ngIf="data.password">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
     </button>
   </mat-form-field>
   <span class="app-login-page-invalid-creds" *ngIf="displayLoginFailed">{{loginFailedText}}</span>
 </div>
-<div mat-dialog-actions>
-  <button mat-button (click)="onSingupClick()" routerLink="/signup">Signup</button>
-  <button [disabled]="isLoginDataInvalid()" mat-button (click)="login()" cdkFocusInitial>Login</button>
+<div class="app-login-page-buttons" mat-dialog-actions>
+  <button class="app-login-signup-button" mat-button (click)="onSingupClick()" routerLink="/signup">Signup</button>
+  <button mat-button [disabled]="isLoginDataInvalid()" (click)="login()" cdkFocusInitial>Login</button>
 </div>
