@@ -36,11 +36,17 @@ export class LoginPageComponent implements OnInit {
       },
       (error) => {
         this.displayLoginFailed = true;
-        if (error.status === 401) {
-          this.loginFailedText = 'Invalid credentials. Please try again.';
-          return;
+
+        switch (error.status) {
+          case 401:
+            this.loginFailedText = 'Invalid credentials. Please try again.';
+            break;
+          case 404:
+            this.loginFailedText = 'Username not found';
+            break;
+          default:
+            this.loginFailedText = 'Unable to login.';
         }
-        this.loginFailedText = 'Unable to login.';
       }
     );
   }

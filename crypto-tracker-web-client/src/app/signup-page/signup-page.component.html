@@ -16,15 +16,15 @@
       </mat-form-field>
       <mat-form-field class="app-signup-page-form-field">
         <mat-label>Confirm password</mat-label>
-        <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="confirmPassword">
+        <input [disabled]="!data.password" matInput [type]="hidePassword ? 'password' : 'text'"
+          [(ngModel)]="confirmPassword" (keyup)="confirmPasswordEntered()">
         <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
           [attr.aria-pressed]="hidePassword">
           <mat-icon *ngIf="data.password">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
       </mat-form-field>
-      <span *ngIf="data.password && confirmPassword && confirmPassword != data.password"
-        class="app-signup-page-password-mismatch">
-        *password and confirm password did not mismatch
+      <span class="app-signup-page-error">
+        {{errorBanner}}
       </span>
     </mat-card-content>
     <mat-card-footer class="app-signup-page-buttons">

@@ -1,0 +1,14 @@
+<mat-card class="settings-page">
+  <mat-card-content class="settings-page-content">
+    <mat-card-title>
+      Settings
+    </mat-card-title>
+    <mat-form-field class="settings-page-crypto">
+      <mat-label>Enter your crypto lisitngs</mat-label>
+      <textarea matInput class="settings-page-crypto-text" rows="8" cols="50" [(ngModel)]="settingsText"
+        placeholder="{{settingsTextPlaceholder}}"></textarea>
+    </mat-form-field>
+    <button mat-button class="settings-page-submit-button" [disabled]="!settingsText" (click)="submitSettings()"
+      cdkFocusInitial>Submit</button>
+  </mat-card-content>
+</mat-card>

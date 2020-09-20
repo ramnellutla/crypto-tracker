@@ -12,7 +12,7 @@
     <img class="app-navigation-bar-user-icon" src="https://img.icons8.com/fluent/48/000000/user-male-circle.png" />
   </div>
   <mat-menu #menu="matMenu">
-    <button class="app-navigation-menu-item" *ngIf="userLoggedIn" mat-menu-item>
+    <button class="app-navigation-menu-item" routerLink='/settings' *ngIf="userLoggedIn" mat-menu-item>
       <span class="app-navigation-menu-item-content">Settings</span>
     </button>
     <button class="app-navigation-menu-item" (click)="openLoginLogoutDialog()" mat-menu-item>

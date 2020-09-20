@@ -26,6 +26,7 @@ export class SignupPageComponent implements OnInit {
   userLoginObservable: Observable<boolean>;
   userLoginSubscription: Subscription;
   userLoggedIn: boolean;
+  errorBanner = '';
 
   constructor(
     private navigationStatusService: NavigationStatusService,
@@ -56,11 +57,29 @@ export class SignupPageComponent implements OnInit {
       (data) => {
         this.hideSignupPage = true;
         this.userService.displayLoginDialog();
+        this.errorBanner = 'Signup successful';
       },
       (error) => {
-        console.error('Error signing up the user', error);
+        if (error.status === 409) {
+          console.error('Error signing up the user', error);
+          this.errorBanner = '*Username already exists. Please try another.';
+          return;
+        }
+        this.errorBanner = '*unable to create user';
       }
     );
+  }
+
+  confirmPasswordEntered(): void {
+    if (
+      this.data.password &&
+      this.confirmPassword &&
+      this.data.password !== this.confirmPassword
+    ) {
+      this.errorBanner = '*password and confirm password did not mismatch';
+      return;
+    }
+    this.errorBanner = '';
   }
 
   logout(): void {

@@ -25,6 +25,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { SignupPageComponent } from './signup-page/signup-page.component';
+import { SettingsPageComponent } from './settings-page/settings-page.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { SignupPageComponent } from './signup-page/signup-page.component';
     HeaderInfoComponent,
     LoginPageComponent,
     SignupPageComponent,
+    SettingsPageComponent,
   ],
   imports: [
     BrowserModule,

@@ -6,12 +6,14 @@ import { PredictionComponent } from './prediction/prediction.component';
 
 import { RouterModule, Routes } from '@angular/router';
 import { SignupPageComponent } from './signup-page/signup-page.component';
+import { SettingsPageComponent } from './settings-page/settings-page.component';
 
 const routes: Routes = [
   { path: 'portfolio', component: PortfolioComponent },
   { path: 'ranking', component: RankingComponent },
   { path: 'prediction', component: PredictionComponent },
   { path: 'signup', component: SignupPageComponent },
+  { path: 'settings', component: SettingsPageComponent },
   { path: '', redirectTo: '/ranking', pathMatch: 'full' },
 ]; // sets up routes constant where you define your routes
 

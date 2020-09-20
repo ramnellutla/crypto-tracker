@@ -12,6 +12,7 @@ import { LoginPageComponent } from 'src/app/login-page/login-page.component';
 export class UserService {
   loginUrl = '/api/user/login';
   signupUrl = '/api/user/signup';
+  submitSettingsUrl = '/api/user/setings';
 
   userLoginSubject: Subject<boolean> = new Subject<boolean>();
 
@@ -68,5 +69,12 @@ export class UserService {
     localStorage.setItem('bearerToken', data.bearerToken);
     localStorage.setItem('expires_at', data.expiry);
     this.userLoginSubject.next(true);
+  }
+
+  submitUserSettings(settings: string): Observable<any> {
+    const putData = {
+      settings,
+    };
+    return this.http.put(this.submitSettingsUrl, putData);
   }
 }
