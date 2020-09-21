@@ -1,14 +1,37 @@
-<mat-card class="settings-page">
-  <mat-card-content class="settings-page-content">
-    <mat-card-title>
-      Settings
-    </mat-card-title>
-    <mat-form-field class="settings-page-crypto">
-      <mat-label>Enter your crypto lisitngs</mat-label>
-      <textarea matInput class="settings-page-crypto-text" rows="8" cols="50" [(ngModel)]="settingsText"
-        placeholder="{{settingsTextPlaceholder}}"></textarea>
+<mat-card class="app-settings-page">
+  <mat-card-title>
+    Settings
+  </mat-card-title>
+  <mat-card-content class="app-settings-page-content">
+    <mat-label class="app-settings-asset-label">Add new asset</mat-label>
+    <mat-form-field class="app-settings-new">
+      <mat-label>Symbol</mat-label>
+      <input matInput [(ngModel)]="newAsset.symbol">
     </mat-form-field>
-    <button mat-button class="settings-page-submit-button" [disabled]="!settingsText" (click)="submitSettings()"
+    <mat-form-field class="app-settings-new">
+      <mat-label>Amount</mat-label>
+      <input matInput [(ngModel)]="newAsset.amountOwned">
+    </mat-form-field>
+    <button mat-button class="app-settings-new-add-button" [disabled]="!newAsset.symbol || !newAsset.amountOwned"
+      (click)="addNewAsset()" cdkFocusInitial>Add</button>
+
+    <mat-label class="app-settings-asset-label">Added assets</mat-label>
+    <table mat-table [dataSource]="dataSource" class="app-settings-page-assets-table mat-elevation-z7">
+      <ng-container matColumnDef="symbol">
+        <th class="portfolio-table-header" mat-header-cell *matHeaderCellDef> Symbol </th>
+        <td mat-cell *matCellDef="let asset"> {{asset.symbol}}</td>
+      </ng-container>
+      <ng-container matColumnDef="amountOwned">
+        <th class="portfolio-table-header" mat-header-cell *matHeaderCellDef> Amount owned</th>
+        <td mat-cell *matCellDef="let asset"> {{asset.amountOwned}}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator class="app-settings-page-assets-table-paginator" [pageSizeOptions]="[3]" showFirstLastButtons>
+    </mat-paginator>
+    <button mat-button class="app-settings-page-submit-button"
+      [disabled]="!currentSettings.assets || currentSettings.assets.length <= 0" (click)="submitSettings()"
       cdkFocusInitial>Submit</button>
   </mat-card-content>
 </mat-card>

@@ -1,3 +1,4 @@
+from functools import wraps
 from flask import Flask, request, abort, make_response, jsonify
 import requests
 import jwt
@@ -11,11 +12,11 @@ from cryptography.fernet import Fernet
 app = Flask(__name__)
 
 f = open(r'..\secretKey.txt', 'r')
-secret = f.read()
+SECRET_KEY = f.read()
 user_name = ''
 pass_word = ''
 
-cipher_suite = Fernet(secret)
+cipher_suite = Fernet(SECRET_KEY)
 
 with open(r'..\dbConnections.json') as db_connections:
     dbData = json.load(db_connections)
@@ -24,6 +25,29 @@ cryptoTrackerConnectionString = dbData['cryptoTrackerConnectionString']
 cluster = MongoClient(cryptoTrackerConnectionString)
 cryptoTrackerDb = cluster['cryptoTracker']
 userCollection = cryptoTrackerDb['user']
+
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+
+        if 'bearerToken' in request.headers:
+            token = request.headers['bearerToken']
+
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 401
+
+        try:
+            data = jwt.decode(token, SECRET_KEY)
+            current_user = data['username']
+
+        except:
+            return jsonify({'message': 'Token is invalid!'}), 401
+
+        return f(current_user, *args, **kwargs)
+
+    return decorated
 
 
 @ app.route('/api/user/login', methods=['POST'])
@@ -47,9 +71,9 @@ def userLogin():
 
     expiry = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
     bearerToken = jwt.encode(
-        {'username': data['username'], 'exp': expiry}, secret, algorithm='HS256')
+        {'username': data['username'], 'exp': expiry}, SECRET_KEY, algorithm='HS256')
 
-    return jsonify({'bearerToken': bearerToken.decode('UTF-8'), 'expiry': expiry})
+    return jsonify({'settings': userdata['settings'], 'bearerToken': bearerToken.decode('UTF-8'), 'expiry': expiry})
 
 
 @ app.route('/api/user/signup', methods=['POST'])
@@ -64,12 +88,23 @@ def signup():
         abort(400)
 
     try:
-        post = {"username": username, "password": ciphered_pwd, "seetings": {}}
+        post = {"username": username, "password": ciphered_pwd, "settings": {}}
         userCollection.insert_one(post)
     except pymongo.errors.DuplicateKeyError:
         abort(409)
     except (AttributeError, pymongo.errors.OperationFailure):
         abort(500)
+    return jsonify({'result': True})
+
+
+@app.route('/api/user/settings', methods=['PUT'])
+@token_required
+def settings(current_user):
+    data = request.get_json()
+    print(data, current_user)
+
+    userCollection.find_one_and_update({"username": current_user}, {
+                                       '$set': {"settings": data['settings']}})
     return jsonify({'result': True})
 
 

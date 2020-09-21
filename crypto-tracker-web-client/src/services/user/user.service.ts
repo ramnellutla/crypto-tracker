@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { User } from 'src/model/user';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import moment from 'moment';
-import { MatDialog } from '@angular/material/dialog';
-import { LoginPageComponent } from 'src/app/login-page/login-page.component';
+import { Settings } from 'src/model/setings';
 
 @Injectable({
   providedIn: 'root',
@@ -12,25 +11,33 @@ import { LoginPageComponent } from 'src/app/login-page/login-page.component';
 export class UserService {
   loginUrl = '/api/user/login';
   signupUrl = '/api/user/signup';
-  submitSettingsUrl = '/api/user/setings';
+  submitSettingsUrl = '/api/user/settings';
+  user: User;
 
-  userLoginSubject: Subject<boolean> = new Subject<boolean>();
+  userLoginSubject: Subject<number> = new Subject<number>();
 
-  constructor(private http: HttpClient, public dialog: MatDialog) {}
+  constructor(private http: HttpClient) {}
 
-  login(user: User): Observable<User> {
+  login(user: User): void {
     const postData = {
       username: user.username,
       password: user.password,
     };
-    return this.http.post<User>(this.loginUrl, postData);
-  }
+    this.http.post<User>(this.loginUrl, postData).subscribe(
+      (data) => {
+        this.setSession(data);
+        this.user = {
+          username: user.username,
+          settings: data.settings,
+          password: '',
+        };
 
-  displayLoginDialog(): any {
-    return this.dialog.open(LoginPageComponent, {
-      width: '500px',
-      data: { name: 'Login' },
-    });
+        this.userLoginSubject.next(200);
+      },
+      (error) => {
+        this.userLoginSubject.next(error.status);
+      }
+    );
   }
 
   signup(username: string, password: string): Observable<User> {
@@ -41,15 +48,14 @@ export class UserService {
     return this.http.post<User>(this.signupUrl, postData);
   }
 
-  getUserLoginObservable(): Observable<boolean> {
+  getUserLoginObservable(): Observable<number> {
     return this.userLoginSubject.asObservable();
   }
 
   logout(): void {
     localStorage.removeItem('bearerToken');
     localStorage.removeItem('expires_at');
-    console.log(localStorage);
-    this.userLoginSubject.next(false);
+    this.userLoginSubject.next(201);
   }
 
   isLoggedIn(): boolean {
@@ -68,13 +74,23 @@ export class UserService {
   setSession(data): void {
     localStorage.setItem('bearerToken', data.bearerToken);
     localStorage.setItem('expires_at', data.expiry);
-    this.userLoginSubject.next(true);
   }
 
-  submitUserSettings(settings: string): Observable<any> {
+  submitUserSettings(settings: Settings): Observable<any> {
     const putData = {
       settings,
     };
-    return this.http.put(this.submitSettingsUrl, putData);
+
+    const httpHeaders = new HttpHeaders().set(
+      'bearerToken',
+      localStorage.getItem('bearerToken')
+    );
+
+    const httpOptions = {
+      headers: httpHeaders,
+    };
+
+    // subscribe to call
+    return this.http.put(this.submitSettingsUrl, putData, httpOptions);
   }
 }

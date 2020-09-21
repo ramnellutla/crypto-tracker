@@ -12,6 +12,8 @@ import {
 import { LoginPageComponent } from '../login-page/login-page.component';
 import { Observable, Subscription } from 'rxjs';
 import { UserService } from 'src/services/user/user.service';
+import CurrencyList from 'src/content/currency.json';
+import { Currency } from 'src/model/currency';
 
 @Component({
   selector: 'app-navigation',
@@ -22,8 +24,10 @@ export class NavigationComponent implements OnInit {
   items: any[];
   portfolio: any;
   userLoggedIn: boolean;
-  userLoginObservable: Observable<boolean>;
+  userLoginObservable: Observable<number>;
   userLoginSubscription: Subscription;
+  selectedCurrency: string;
+  currencyList: Currency[];
 
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   constructor(
@@ -35,9 +39,14 @@ export class NavigationComponent implements OnInit {
   ngOnInit(): void {
     this.userLoginObservable = this.userService.getUserLoginObservable();
 
-    this.userLoginSubscription = this.userLoginObservable.subscribe((data) => {
-      this.userLoggedIn = data;
-    });
+    this.userLoginSubscription = this.userLoginObservable.subscribe(
+      (status) => {
+        this.userLoggedIn = status === 200;
+        this.selectedCurrency =
+          this.userService.user.settings &&
+          this.userService.user.settings.currency;
+      }
+    );
 
     if (this.userService.isLoggedIn()) {
       this.userLoggedIn = true;
@@ -69,6 +78,16 @@ export class NavigationComponent implements OnInit {
         imageSource: 'assets/img/Predictions.png',
       },
     ];
+
+    this.currencyList = CurrencyList.sort((a, b) =>
+      a.currencyCode > b.currencyCode
+        ? 1
+        : b.currencyCode > a.currencyCode
+        ? -1
+        : 0
+    );
+
+    this.selectedCurrency = this.selectedCurrency || 'USD';
   }
 
   getCurrentTabImage(): string {

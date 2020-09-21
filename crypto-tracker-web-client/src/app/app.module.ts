@@ -12,6 +12,8 @@ import { RankingComponent } from './ranking/ranking.component';
 import { PredictionComponent } from './prediction/prediction.component';
 import { HeaderInfoComponent } from './header-info/header-info.component';
 import { LoginPageComponent } from './login-page/login-page.component';
+import { SignupPageComponent } from './signup-page/signup-page.component';
+import { SettingsPageComponent } from './settings-page/settings-page.component';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -24,8 +26,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { SignupPageComponent } from './signup-page/signup-page.component';
-import { SettingsPageComponent } from './settings-page/settings-page.component';
+import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { SettingsPageComponent } from './settings-page/settings-page.component';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
+    MatListModule,
+    MatSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

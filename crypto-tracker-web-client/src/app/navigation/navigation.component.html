@@ -8,6 +8,13 @@
       {{tab.label}}
     </a>
   </nav>
+  <mat-form-field class="app-navigation-bar-currency">
+    <mat-label>Currency</mat-label>
+    <mat-select [(value)]="selectedCurrency">
+      <mat-option *ngFor="let currency of currencyList" value="{{currency.currencyCode}}"> {{currency.currencyCode}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
   <div [matMenuTriggerFor]="menu" class="app-navigation-bar-user-icon-container" matRipple>
     <img class="app-navigation-bar-user-icon" src="https://img.icons8.com/fluent/48/000000/user-male-circle.png" />
   </div>

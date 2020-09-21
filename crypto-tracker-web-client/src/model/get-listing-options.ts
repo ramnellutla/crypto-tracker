@@ -7,7 +7,7 @@ export class GetListingOptions {
 
   constructor() {
     this.start = '1';
-    this.limit = '2000';
+    this.limit = '2500';
     this.convert = 'USD';
     this.sort = 'market_cap';
     this.sort_dir = 'desc';

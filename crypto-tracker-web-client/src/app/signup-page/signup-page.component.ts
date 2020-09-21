@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { error } from 'protractor';
 import { Observable, Subscription } from 'rxjs';
+import { DialogService } from 'src/services/dialog/dialog.service';
 import {
   NavigationStatusService,
   TabName,
@@ -23,7 +23,7 @@ export class SignupPageComponent implements OnInit {
   hidePassword = true;
   confirmPassword: string;
   hideSignupPage = false;
-  userLoginObservable: Observable<boolean>;
+  userLoginObservable: Observable<number>;
   userLoginSubscription: Subscription;
   userLoggedIn: boolean;
   errorBanner = '';
@@ -31,6 +31,7 @@ export class SignupPageComponent implements OnInit {
   constructor(
     private navigationStatusService: NavigationStatusService,
     private userService: UserService,
+    private dialogService: DialogService,
     private router: Router
   ) {
     this.navigationStatusService.currentActiveTab = TabName.none.toString();
@@ -39,10 +40,12 @@ export class SignupPageComponent implements OnInit {
   ngOnInit(): void {
     this.userLoginObservable = this.userService.getUserLoginObservable();
 
-    this.userLoginSubscription = this.userLoginObservable.subscribe((data) => {
-      this.userLoggedIn = data;
-      this.router.navigateByUrl('/portfolio');
-    });
+    this.userLoginSubscription = this.userLoginObservable.subscribe(
+      (status) => {
+        this.userLoggedIn = status === 200;
+        this.router.navigateByUrl('/portfolio');
+      }
+    );
 
     if (this.userService.isLoggedIn()) {
       this.userLoggedIn = true;
@@ -56,7 +59,7 @@ export class SignupPageComponent implements OnInit {
     this.userService.signup(this.data.username, this.data.password).subscribe(
       (data) => {
         this.hideSignupPage = true;
-        this.userService.displayLoginDialog();
+        this.dialogService.displayLoginDialog();
         this.errorBanner = 'Signup successful';
       },
       (error) => {
@@ -88,7 +91,7 @@ export class SignupPageComponent implements OnInit {
 
   login(): void {
     this.clearData();
-    const dialog = this.userService.displayLoginDialog();
+    const dialog = this.dialogService.displayLoginDialog();
     this.hideSignupPage = true;
 
     dialog.afterClosed().subscribe((result) => {

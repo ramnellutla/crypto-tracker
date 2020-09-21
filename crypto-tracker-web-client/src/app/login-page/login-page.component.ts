@@ -1,11 +1,14 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Observable, Subscription } from 'rxjs';
+import { Settings } from 'src/model/setings';
 import { UserService } from 'src/services/user/user.service';
 
 export interface DialogData {
   name: string;
   username: string;
   password: string;
+  settings: Settings;
 }
 
 @Component({
@@ -22,22 +25,23 @@ export class LoginPageComponent implements OnInit {
   displayLoginFailed = false;
   loginFailedText = '';
   hidePassword = true;
-  ngOnInit(): void {}
 
-  onSingupClick(): void {
-    this.dialogRef.close();
-  }
+  userLoginObservable: Observable<number>;
+  userLoginSubscription: Subscription;
 
-  login(): void {
-    this.userService.login(this.data).subscribe(
-      (data) => {
-        this.userService.setSession(data);
-        this.dialogRef.close();
-      },
-      (error) => {
-        this.displayLoginFailed = true;
+  ngOnInit(): void {
+    this.userLoginObservable = this.userService.getUserLoginObservable();
 
-        switch (error.status) {
+    this.userLoginSubscription = this.userLoginObservable.subscribe(
+      (status) => {
+        if (status !== 200) {
+          this.displayLoginFailed = true;
+        }
+
+        switch (status) {
+          case 200:
+            this.dialogRef.close();
+            break;
           case 401:
             this.loginFailedText = 'Invalid credentials. Please try again.';
             break;
@@ -49,6 +53,14 @@ export class LoginPageComponent implements OnInit {
         }
       }
     );
+  }
+
+  onSingupClick(): void {
+    this.dialogRef.close();
+  }
+
+  login(): void {
+    this.userService.login(this.data);
   }
 
   isLoginDataInvalid(): boolean {

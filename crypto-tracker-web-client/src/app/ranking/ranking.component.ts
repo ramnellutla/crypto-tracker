@@ -5,6 +5,7 @@ import { GetListingOptions } from 'src/model/get-listing-options';
 import { ListingTable } from 'src/model/listing-table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+
 import {
   NavigationStatusService,
   TabName,
@@ -53,7 +54,6 @@ export class RankingComponent implements OnInit, AfterViewInit {
         this.dataSource.data = data;
       }
     );
-
     this.coinMarketCapService.getCryptoList(new GetListingOptions());
   }
 
