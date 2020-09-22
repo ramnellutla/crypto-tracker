@@ -38,17 +38,20 @@ def token_required(f):
 @app.route('/api/getPortfolio')
 @token_required
 def getPortfolio(current_user):
+    url = 'https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
+    headers = {
+        'Accepts': 'application/json',
+        'X-CMC_PRO_API_KEY': 'b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c',
+    }
+    session = requests.session()
+    session.headers.update(headers)
     try:
-        response = [{
-            'asset': "BitCoin",
-            'symbol': 'BTC',
-            'amountOwned': 10,
-            'value': 100,
-            'price': 10,
-            'percentChange1h': 0.23,
-            'percentChange24h': 0.25,
-            'percentchange7d': -0.12}]
-        data = json.dumps(response)
+        parameters = {
+            'convert': request.args.get('convert'),
+            'symbol': request.args.get('symbol')
+        }
+        response = session.get(url, params=parameters)
+        data = json.loads(response.text)
         return data
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)

@@ -73,7 +73,7 @@ def userLogin():
     bearerToken = jwt.encode(
         {'username': data['username'], 'exp': expiry}, SECRET_KEY, algorithm='HS256')
 
-    return jsonify({'settings': userdata['settings'], 'bearerToken': bearerToken.decode('UTF-8'), 'expiry': expiry})
+    return jsonify({'user': {'username': username, 'settings': userdata['settings']}, 'bearerToken': bearerToken.decode('UTF-8'), 'expiry': expiry})
 
 
 @ app.route('/api/user/signup', methods=['POST'])
@@ -94,7 +94,7 @@ def signup():
         abort(409)
     except (AttributeError, pymongo.errors.OperationFailure):
         abort(500)
-    return jsonify({'result': True})
+    return jsonify({'resuslt': True})
 
 
 @app.route('/api/user/settings', methods=['PUT'])
@@ -105,7 +105,7 @@ def settings(current_user):
 
     userCollection.find_one_and_update({"username": current_user}, {
                                        '$set': {"settings": data['settings']}})
-    return jsonify({'result': True})
+    return jsonify({'settings': data['settings']})
 
 
 @ app.errorhandler(401)
