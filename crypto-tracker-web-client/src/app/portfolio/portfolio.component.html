@@ -10,7 +10,7 @@
     </ng-container>
     <ng-container matColumnDef="amountOwned">
       <th class="portfolio-table-header" mat-header-cell *matHeaderCellDef> Amount owned </th>
-      <td mat-cell *matCellDef="let portfolio"> ${{portfolio.amountOwned}} </td>
+      <td mat-cell *matCellDef="let portfolio"> {{portfolio.amountOwned}} </td>
     </ng-container>
     <ng-container matColumnDef="value">
       <th class="portfolio-table-header" mat-header-cell *matHeaderCellDef> {{convert}} Value </th>

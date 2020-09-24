@@ -59,16 +59,17 @@ export class PortfolioComponent implements OnInit {
 
     this.userLoginSubscription = this.userLoginObservable.subscribe(
       (status) => {
-        this.userLoggedIn = status === 200;
-        if (this.userLoggedIn) {
-          this.userPortfolioService.getUserPortFolio('user1', 'USD');
-        }
+        this.getPortfolio();
       }
     );
 
+    this.getPortfolio();
+  }
+
+  getPortfolio(): void {
     if (this.userService.isLoggedIn()) {
       this.userLoggedIn = true;
-      this.userPortfolioService.getUserPortFolio('user1', 'USD');
+      this.userPortfolioService.getUserPortFolio();
     }
   }
 

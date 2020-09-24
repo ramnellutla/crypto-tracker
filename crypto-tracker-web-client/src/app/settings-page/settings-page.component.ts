@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Observable, Subscription } from 'rxjs';
 import { Asset } from 'src/model/asset';
 import { Settings } from 'src/model/setings';
+import { DialogService } from 'src/services/dialog/dialog.service';
 import {
   NavigationStatusService,
   TabName,
@@ -21,25 +23,56 @@ export class SettingsPageComponent implements OnInit {
   currentSettings: Settings = new Settings();
   dataSource = new MatTableDataSource<Asset>();
   displayedColumns = ['symbol', 'amountOwned'];
+  userLoggedIn: boolean;
+
+  userLoginObservable: Observable<number>;
+  userLoginSubscription: Subscription;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private navigationStatusService: NavigationStatusService,
-    private userService: UserService
+    private userService: UserService,
+    private dialogService: DialogService
   ) {
     this.navigationStatusService.currentActiveTab = TabName.none.toString();
   }
 
   ngOnInit(): void {
+    this.userLoginObservable = this.userService.getUserLoginObservable();
+
+    this.userLoginSubscription = this.userLoginObservable.subscribe(
+      (status) => {
+        this.userLoggedIn = status === 200;
+        if (this.userLoggedIn) {
+          this.consumeUserSettings();
+          return;
+        }
+        this.dataSource.data = [];
+      }
+    );
+
+    if (!this.userService.isLoggedIn()) {
+      return;
+    }
+    this.userLoggedIn = true;
+    this.consumeUserSettings();
+  }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  consumeUserSettings(): void {
+    this.currentSettings = this.userService.user.settings;
     this.dataSource.data = this.currentSettings.assets;
-    setTimeout(() => (this.dataSource.paginator = this.paginator));
+  }
+
+  login(): void {
+    this.dialogService.displayLoginDialog();
   }
 
   submitSettings(): void {
-    this.userService.submitUserSettings(this.currentSettings).subscribe(
-      (data) => {},
-      (error) => {}
-    );
+    this.userService.submitUserSettings(this.currentSettings);
   }
 
   addNewAsset(): void {

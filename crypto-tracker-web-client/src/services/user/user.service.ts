@@ -15,20 +15,29 @@ export class UserService {
   user: User;
 
   userLoginSubject: Subject<number> = new Subject<number>();
+  userSettingsSubject: Subject<Settings> = new Subject<Settings>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    if (this.isLoggedIn) {
+      this.setUser();
+    }
+  }
+
+  setUser(): void {
+    this.user = JSON.parse(localStorage.getItem('user')) as User;
+  }
 
   login(user: User): void {
     const postData = {
       username: user.username,
       password: user.password,
     };
-    this.http.post<User>(this.loginUrl, postData).subscribe(
+    this.http.post<any>(this.loginUrl, postData).subscribe(
       (data) => {
         this.setSession(data);
         this.user = {
-          username: user.username,
-          settings: data.settings,
+          username: data.user.username,
+          settings: data.user.settings,
           password: '',
         };
 
@@ -53,8 +62,7 @@ export class UserService {
   }
 
   logout(): void {
-    localStorage.removeItem('bearerToken');
-    localStorage.removeItem('expires_at');
+    localStorage.clear();
     this.userLoginSubject.next(201);
   }
 
@@ -74,9 +82,10 @@ export class UserService {
   setSession(data): void {
     localStorage.setItem('bearerToken', data.bearerToken);
     localStorage.setItem('expires_at', data.expiry);
+    localStorage.setItem('user', JSON.stringify(data.user));
   }
 
-  submitUserSettings(settings: Settings): Observable<any> {
+  submitUserSettings(settings: Settings): void {
     const putData = {
       settings,
     };
@@ -91,6 +100,17 @@ export class UserService {
     };
 
     // subscribe to call
-    return this.http.put(this.submitSettingsUrl, putData, httpOptions);
+    this.http.put(this.submitSettingsUrl, putData, httpOptions).subscribe(
+      (settings: Settings) => {
+        this.user.settings = settings;
+      },
+      (error) => {}
+    );
+  }
+
+  getAssetAmount(key: string): number {
+    return (
+      this.user.settings.assets.find((a) => a.symbol === key).amountOwned || 0
+    );
   }
 }
