@@ -22,9 +22,10 @@ build/
 /crypto-tracker-web-client/out-tsc
 # Only exists if Bazel was run
 /crypto-tracker-web-client/bazel-out
+**/.serverless
 
 # dependencies
-/crypto-tracker-web-client/node_modules
+**/node_modules
 
 # profiling files
 chrome-profiler-events*.json
